@@ -5,7 +5,7 @@ module Fractal (
     zoom,
     cX,
     cY,
-    depth,
+    maxIter,
     fractalLoop,
     genFractal
 ) where
@@ -19,19 +19,20 @@ data Julia =
            , zoom :: Double
            , cX :: Double
            , cY :: Double 
-           , depth :: Int
+           , maxIter :: Int
            } 
            deriving (Eq,Show,Ord)
 
-fractalLoop :: Double -> Double -> Double -> Double -> Int -> Int
-fractalLoop zx zy cX cY d
-  | zx**2 + zy**2 >= 4 || d <= 1 = d
-  | otherwise = fractalLoop tmp czy cX cY (d - 1)
+fractalLoop :: Double -> Double -> Double -> Double -> Double -> Int -> Double
+fractalLoop zx zy cX cY d maxIter
+  | zx**2 + zy**2 >= 4 || maxIter <= 1 = newDepth
+  | otherwise = fractalLoop tmp czy cX cY newDepth (maxIter - 1)
     where tmp = zx**2 - zy**2 + cX
           czy = 2*zx*zy + cY
+          newDepth = d + exp (-(abs d))
 
 genFractal :: Julia -> Int -> Int -> PixelRGB8
-genFractal fract x y = PixelRGB8 l l l
+genFractal fract x y = PixelRGB8 r g b
   where 
     h  = fromIntegral $ height fract
     w  = fromIntegral $ width fract
@@ -43,9 +44,9 @@ genFractal fract x y = PixelRGB8 l l l
     zx = 1.5*(dx-w/2)/(0.5*z*w)
     zy = (dy-h/2)/(0.5*z*h)
 
-    i = fractalLoop zx zy cx cy $ depth fract
+    i = fractalLoop zx zy cx cy 0 $ maxIter fract
 
-    r = fromIntegral $ i * 20 :: Double
-    g = fromIntegral $ i :: Double
-    b = fromIntegral $ i * 8 :: Double
-    l = fromIntegral $ round $ r * 0.399 + g * 0.487 + b * 0.114
+    r = round $ i * 20
+    g = round $ i
+    b = round $ i * 8 
+    -- l = fromIntegral $ 255 - round (r * 0.399 + g * 0.487 + b * 0.114)

@@ -23,13 +23,6 @@ genFrame f frame = generateImage f' w h
     pixelArray = listArray bounds pixels
     f'         = curry (pixelArray !)
 
-circle :: Int -> Int -> Int -> Image PixelRGB8
-circle r w h = generateImage f w h
-  where f x y
-          | (w - x) ^ 2 + (h - y) ^ 2 == r ^ 2 = PixelRGB8 0 0 0
-          | otherwise = PixelRGB8 255 255 255
-
-
 genFrames :: Int -> Int -> Int -> Double -> IO ()
 genFrames frame frameCount depth zoom
   | frame == frameCount = return ()
