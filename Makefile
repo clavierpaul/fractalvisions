@@ -6,5 +6,5 @@ out/%.png:
 	stack run
 
 clean:
-	rm -r out/
-	rm *.mp4
+	rm -rf out/
+	rm -f *.mp4
