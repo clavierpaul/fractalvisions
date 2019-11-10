@@ -52,5 +52,5 @@ genFrames frame frameCount depth zoom
     
 main :: IO ()
 main = do
-  genFrames 0 1000 100 0.5
+  genFrames 0 1000 1000 0.5
   putStrLn "done"
