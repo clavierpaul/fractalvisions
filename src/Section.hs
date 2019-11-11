@@ -13,7 +13,7 @@ import Data.Array
 import Control.Parallel.Strategies
 
 import Fractal
-import Processing
+import qualified Processing
 
 data Options = Options { 
     frame      :: Int,
@@ -41,7 +41,7 @@ genFrame f frame sat = do
         w = width f
         bounds     = ((0, 0), (w-1,h-1))
         pixels     = parMap rseq (uncurry (genFractal f)) (range bounds)
-        saturated  = map (saturation sat) pixels
+        saturated  = map (Processing.saturation sat) pixels
         pixelArray = listArray bounds pixels
         f'         = curry (pixelArray !)
         frameF     = generateImage f' w h
