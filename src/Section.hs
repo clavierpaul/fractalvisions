@@ -53,8 +53,8 @@ genSection (Options frame frameCount depth zoom zoomStep cX cY cXstep cYstep sat
         nFrame = fromIntegral frame
         nDepth = fromIntegral depth
 
-        newcX  = sin $ cX + nFrame * cXstep 
-        newcY  = sin $ cY + nFrame * cYstep 
+        newcX  = sin $ nFrame * cXstep 
+        newcY  = sin $ nFrame * cYstep 
 
         -- disable kick events if no kick
         kickFrames = if kick then quarterNotes else [-1]
@@ -70,8 +70,8 @@ introA = genSection (Options 0 126 10 0.3 0.0001 0 0.3 0 0 0 False)
 
 introB :: Options -> IO Options
 introB (Options frame _ depth zoom zoomStep cX cY _ _ s _) =
-    genSection (Options frame (444 + frame) depth zoom zoomStep cX cY 0.005 0.0005 s False)
+    genSection (Options frame (444 + frame) depth zoom zoomStep cX cY 0.0001 0.001 s False)
 
 verseA :: Options -> IO Options
 verseA (Options frame _ depth zoom zoomStep cX cY cXstep cYstep s _) =
-    genSection (Options frame (100 + frame) depth zoom zoomStep cX cY cXstep cYstep s True)
+    genSection (Options frame (3150 + frame) depth zoom zoomStep cX cY cXstep cYstep s True)

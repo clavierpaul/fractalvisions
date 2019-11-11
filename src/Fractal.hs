@@ -44,7 +44,7 @@ genFractal fract x y = PixelRGB8 r g b
 
     i = fractalLoop zx zy cx cy $ maxIter fract
 
-    r = round $ (sin((0.2147 * i) + 4) * 230) + 25
-    g = round $ (sin((0.2145 * i) + 4) * 230) + 25
-    b = round $ (sin((0.2146 * i) + 4) * 230) + 25
+    r = round $ (sin((0.1147 * i) + 4) * 230) + 25
+    g = round $ (sin((0.1145 * i) + 4) * 230) + 25
+    b = round $ (sin((0.1146 * i) + 4) * 230) + 25
     -- l = fromIntegral $ 255 - round (r * 0.399 + g * 0.487 + b * 0.114)
