@@ -14,9 +14,20 @@ import Control.Parallel.Strategies
 
 import Fractal
 import Processing
---                     frame count depth zoom   zoomStep cX     cY     cXstep cYstep saturation kick
-data Options = Options Int   Int   Int   Double Double   Double Double Double Double Double     Bool
-    deriving (Show, Eq)
+
+data Options = Options { 
+    frame      :: Int,
+    count      :: Int,
+    depth      :: Int,
+    zoom       :: Double,
+    zoomStep   :: Double,
+    cX         :: Double,
+    cY         :: Double,
+    cXstep     :: Double,
+    cYstep     :: Double,
+    saturation :: Double,
+    kick       :: Bool
+} deriving (Show, Eq)
 
 quarterNotes = map (\x -> 570 + round (x * (3600.0/130.0))) [0..20000]
 
