@@ -64,7 +64,7 @@ genSection (Options frame frameCount depth zoom zoomStep cX cY cXstep cYstep sat
         nFrame = fromIntegral frame
         nDepth = fromIntegral depth
 
-        newcX  = if nFrame >= 0 && nFrame <=124 then sin $ cX + nFrame * cXstep else sin $ nFrame * cXstep 
+        newcX  = if nFrame >= 0 && nFrame <= 124 then sin $ cX + nFrame * cXstep else sin $ nFrame * cXstep 
         newcY  = if nFrame >= 0 && nFrame <= 124 then sin $ cY + nFrame * cYstep else sin $ nFrame * cYstep
 
         -- disable kick events if no kick
