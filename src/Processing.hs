@@ -23,33 +23,19 @@ hsvToRGB h s v = PixelRGB8 r g b
 
 
 saturation :: Double -> PixelRGB8 -> PixelRGB8
-saturation s (PixelRGB8 r g b) = hsvToRGB h s v
+saturation s (PixelRGB8 r g b) = hsvToRGB (if h < 0 then h + 360 else h) s v
     where
         scaledRGBs = map (\x -> (fromIntegral x) / 255.0) [r, g, b] :: [Double]
         (r':g':b':[]) = scaledRGBs
         cMax = maximum scaledRGBs
         cMin = minimum scaledRGBs
         delta = cMax - cMin
-        h | cMax == r' = 60 * (round ((g'-b')/delta) `mod` 6)
+
+        h | delta == 0 = -1
+          | cMax == r' = 60 * (round ((g'-b')/delta))
           | cMax == g' = 60 * (round ((b'-r')/delta) + 2)
           | cMax == b' = 60 * (round ((r'-g')/delta) + 4)
-          | otherwise  = 0
-        v = cMax
+          
+        v | cMax == 0 = undefined
+          | otherwise = cMax
 
-
--- Legacy code by Advaith with s removed as this is already provided and thus does not need to be calculated:
-
---       cMax = maximum [r',g',b']
---       cMin = minimum [r',g',b']
---       delta = cMax - cMin
---       h | cMax == r = 
---             if (g-b) <= 0 
---                 then fromIntegral (360 + toInteger (60 * ((((g - b) `div` delta))))) 
---                 else fromIntegral (60 * ((((g - b) `div` delta))))
---         | cMax == g = if (b-r) <= 0 then fromIntegral (360 + toInteger (2 + (60 * ((((b - r) `div` delta)))))) else fromIntegral (60 * ((((b - r) `div` delta))))
---         | cMax == b = if (r-g) <= 0 then fromIntegral (360 + toInteger (4 + (60 * ((((r - g) `div` delta)))))) else fromIntegral (60 * ((((r - g) `div` delta))))
---         | otherwise = fromIntegral $ toInteger (-1)
---       v | cMax == 0 = undefined
---         | otherwise = cMax
--- we know that r,g,b are values between [0..1]
--- h = 0,360 s = [0,1] v = [0,1]
