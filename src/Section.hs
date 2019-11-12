@@ -44,7 +44,7 @@ genFrame f frame sat = do
         bounds     = ((0, 0), (w-1,h-1))
         pixels     = parMap rseq (uncurry (genFractal f)) (range bounds)
         saturated  = map (Processing.saturation sat) pixels
-        pixelArray = listArray bounds pixels
+        pixelArray = listArray bounds saturated
         f'         = curry (pixelArray !)
         frameF     = generateImage f' w h
 
