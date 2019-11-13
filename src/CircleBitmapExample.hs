@@ -12,12 +12,12 @@ module CircleBitmapExample where
   drawCircle center radius = do    
     writePng "../test/TEST.png" $ generateImage pixelRenderer w h
     where
-      circlePoints = generateCirclePoints (w `div` 2,h `div` 2) 400
+      circlePoints = generateCirclePoints (w `div` 2,h `div` 2) 200
       pixelRenderer x y
-        | (x , y) `elem` circlePoints = PixelRGB8 0 0 0 
+        | (x , y) `elem` circlePoints = PixelRGB8 0 255 0 
         | otherwise                   = PixelRGB8 255 255 255 
-      w = 1000
-      h = 1000
+      w = 500
+      h = 500
 
 
 -- drawCircle :: Int -> Point -> Image PixelRGBA8 
