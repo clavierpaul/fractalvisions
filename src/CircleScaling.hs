@@ -5,7 +5,12 @@ module CircleScaling where
   import LOL
   import Text.Printf
   -- import Vision.Image.Transform.ScaleDCT
-  
+  data Circle = Circle {
+    framenuM :: Int,
+    frameCount :: Int,
+    dim :: Int,
+    step :: Int
+  }
   loadImage :: IO (Maybe (Image PixelRGBA8))
   loadImage = do
     imageLoad <- readPng "src/circle.png"
@@ -15,19 +20,19 @@ module CircleScaling where
       
         
   
-  scaling :: Int -> Int -> Int -> Int -> IO ()
-  scaling frameNum frameCount dim step = do
+  scaling :: Circle -> IO ()
+  scaling circle = do
     image <- loadImage
     case image of
       Nothing    -> putStrLn "error loading image"
-      Just image -> genCircleFrame image frameNum frameCount dim step
+      Just image -> genCircleFrame image circle
   
-  genCircleFrame :: (Image PixelRGBA8) -> Int -> Int -> Int -> Int -> IO()
-  genCircleFrame image frameNum frameCount dim step = do
+  genCircleFrame :: (Image PixelRGBA8) -> Circle -> IO()
+  genCircleFrame image (Circle frameNum frameCount dim step) = do
     writePng (printf "images/circle%04d.png" (frameNum+1)) (scaleBilinear dim dim image)
     if (frameNum+1) == frameCount
       then return()
-      else genCircleFrame image (frameNum + 1) frameCount (dim + step) step
+      else genCircleFrame image (Circle (frameNum + 1) frameCount (dim + step) step)
             -- putStrLn $ printf "rendering circle %d" (frame+1)
             -- writePng (printf "images/circle%04d.png" frame) (scaleBilinear dim dim image)
 
