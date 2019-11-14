@@ -19,6 +19,8 @@ data Julia =
            , cX :: Double
            , cY :: Double 
            , maxIter :: Int
+           , frame :: Int
+           , sat :: Double
            } 
            deriving (Eq,Show,Ord)
 
@@ -30,11 +32,13 @@ fractalLoop zx zy cX cY maxIter
           czy = 2*zx*zy + cY
 
 genFractal :: Julia -> Int -> Int -> PixelRGB8
-genFractal fract x y = PixelRGB8 r g b
+genFractal fract x y = pixel
   where 
     h  = fromIntegral $ height fract
     w  = fromIntegral $ width fract
     z  = zoom fract 
+    f  = frame fract
+    s  = sat fract
     cx = cX fract 
     cy = cY fract
     dx = fromIntegral x
@@ -43,8 +47,9 @@ genFractal fract x y = PixelRGB8 r g b
     zy = (dy-h/2)/(0.5*z*h)
 
     i = fractalLoop zx zy cx cy $ maxIter fract
-
-    r = round $ (sin((0.3147 * i) + 4) * 230) + 25
-    g = round $ (sin((0.3145 * i) + 4) * 230) + 25
-    b = round $ (sin((0.3146 * i) + 4) * 230) + 25
+    v = abs $ sin i
+    pixel = hsvToRGB (f `mod` 360) s v
+    -- r = round $ (sin((0.3147 * i) + 4) * 230) + 25
+    -- g = round $ (sin((0.3145 * i) + 4) * 230) + 25
+    -- b = round $ (sin((0.3146 * i) + 4) * 230) + 25
     -- l = fromIntegral $ 255 - round (r * 0.399 + g * 0.487 + b * 0.114)

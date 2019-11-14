@@ -42,8 +42,8 @@ data Options = Options {
 quarterNotesA = map (\x -> 554 + round (x * (3600.0/130.0))) [0..7421]
 quarterNotesB = map (\x -> 7643 + round (x * (3600.0/130.0))) [0..10000]
 
-genFrame :: Julia -> Int -> Double -> IO ()
-genFrame f frame sat = do
+genFrame :: Julia -> Int -> IO ()
+genFrame f frame = do
     -- write frame to file
     writePng (printf "out/frame%04d.png" frame) frameF
     if frame `mod` 10 == 0 
@@ -54,8 +54,7 @@ genFrame f frame sat = do
         w = width f
         bounds     = ((0, 0), (w-1,h-1))
         pixels     = parMap rseq (uncurry (genFractal f)) (range bounds)
-        saturated  = map (Processing.saturation sat) pixels
-        pixelArray = listArray bounds saturated
+        pixelArray = listArray bounds pixels
         f'         = curry (pixelArray !)
         frameF     = generateImage f' w h
 
@@ -65,10 +64,10 @@ genFrame f frame sat = do
 genSection :: Options -> IO Options
 genSection (Options frame out depth zoom zoomStep cXstep cYstep sat kick) = do
         -- define fractal
-        let f = Julia 200 200 zoom newcX newcY depth
+        let f = Julia 200 200 zoom newcX newcY depth frame sat
         
         -- render fractal
-        genFrame f frame sat
+        genFrame f frame
 
         -- re-run with new params if frames left to render
         if (frame + 1) == out
@@ -104,7 +103,7 @@ introA = genSection (Options 0 115 10 0.3 0.0001 0 0 0 False)
 
 introB :: Options -> IO Options
 introB (Options frame _ depth zoom zoomStep _ _ s _) =
-    genSection (Options frame 554 depth zoom zoomStep 0.0001 0.001 s False)
+    genSection (Options frame 554 depth zoom zoomStep 0.0001 0.001 1 False)
 
 verse1 :: Options -> IO Options
 verse1 (Options frame _ depth zoom zoomStep cXstep cYstep s _) =
