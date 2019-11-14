@@ -4,7 +4,9 @@ module Section (
     introA,
     introB,
     verse1,
-    bridge1A
+    bridge1A,
+    bridge1B,
+    bridge1C
 ) where
 
 import Codec.Picture

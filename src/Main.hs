@@ -10,4 +10,6 @@ main = do
   iB <- introB iA
   v1 <- verse1 iB
   b1a <- bridge1A v1
+  b1b <- bridge1B b1a
+  b1c <- bridge1C b1b
   return ()
