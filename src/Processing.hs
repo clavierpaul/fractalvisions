@@ -14,39 +14,24 @@ import Data.List
 
 import Control.Monad.ST
 import qualified Codec.Picture.Types as M
-
-hsvToRGB :: Int -> Double -> Double -> PixelRGB8
+  
+hsvToRGB :: Double -> Double -> Double -> PixelRGB8
 hsvToRGB h s v = PixelRGB8 r g b
-    where 
-        c = v*s
-        x = c*fromIntegral (1 - abs ( (h `div` 60) `mod` 2 - 1) )
-        m = v-c
-        scaledRGBs
-            |   0 <= h && h <  60 = [c,x,0]
-            |  60 <= h && h < 120 = [x,c,0]
-            | 120 <= h && h < 180 = [0,c,x]
-            | 180 <= h && h < 240 = [0,x,c]
-            | 240 <= h && h < 300 = [x,0,c]
-            | otherwise           = [c,0,x]
-        (r:g:b:[]) = map (\x -> fromInteger $ round $ (x+m)*255) scaledRGBs
-
-
-saturation :: Double -> PixelRGB8 -> PixelRGB8
-saturation s (PixelRGB8 r g b) = hsvToRGB (if h < 0 then h + 360 else h) s v
-    where
-        scaledRGBs = map (\x -> (fromIntegral x) / 255.0) [r, g, b] :: [Double]
-        (r':g':b':[]) = scaledRGBs
-        cMax = maximum scaledRGBs
-        cMin = minimum scaledRGBs
-        delta = cMax - cMin
-
-        h | delta == 0 = -1
-          | cMax == r' = 60 * (round ((g'-b')/delta))
-          | cMax == g' = 60 * (round ((b'-r')/delta) + 2)
-          | cMax == b' = 60 * (round ((r'-g')/delta) + 4)
-          
-        v | cMax == 0 = undefined
-          | otherwise = cMax
+  where
+    hh = h / 60.0
+    i = fromIntegral $ floor hh
+    ff = hh - i
+    p = fromIntegral $ round $ 255 * v * (1.0 - s)
+    q = fromIntegral $ round $ 255 * v * (1.0 - (s * ff))
+    t = fromIntegral $ round $ 255 * v * (1.0 - (s * (1.0 - ff)))
+    nV = fromIntegral $ round $ 255 * v
+    (r, g, b) = case i of
+      0.0 -> (nV,  t,  p)
+      1.0 -> ( q, nV,  p)
+      2.0 -> ( p, nV,  t)
+      3.0 -> ( p,  q, nV)
+      4.0 -> ( t,  p, nV)
+      _   -> (nV,  p,  q)
 
 -- end of own work
 
