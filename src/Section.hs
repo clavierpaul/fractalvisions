@@ -47,6 +47,9 @@ genFrame f frame sat = do
         f'         = curry (pixelArray !)
         frameF     = generateImage f' w h
 
+        -- bounds = ((0, 0), (width-1,height-1))
+        -- pixels = [0,1,1...]
+        -- pixelArray = listArray bounds pixels
 genSection :: Options -> IO Options
 genSection (Options frame out depth zoom zoomStep cXstep cYstep sat kick) = do
         -- define fractal
