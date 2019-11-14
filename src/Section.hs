@@ -6,7 +6,16 @@ module Section (
     verse1,
     bridge1A,
     bridge1B,
-    bridge1C
+    bridge1C,
+    chorus1,
+    chorusend,
+    bridge2,
+    verse2a,
+    verse2b,
+    verse2c,
+    prechorus,
+    chorus2,
+    outro
 ) where
 
 import Codec.Picture
@@ -102,13 +111,49 @@ verse1 (Options frame _ depth zoom zoomStep cXstep cYstep s _) =
     genSection (Options frame 4098 depth zoom zoomStep cXstep cYstep s True)
 
 bridge1A :: Options -> IO Options
-bridge1A (Options frame _ depth zoom _ _ _ s _) =
-    genSection (Options frame 4541 depth zoom 0.0005 0.00015 0.0015 s True)
+bridge1A (Options frame _ depth zoom _ _ _ s kick) =
+    genSection (Options frame 4541 depth zoom 0.0005 0.00015 0.0015 s kick)
 
 bridge1B :: Options -> IO Options
-bridge1B (Options frame _ depth zoom _ _ _ s _) =
-    genSection (Options frame 5427 depth 0.5 0.0007 0.0002 0.002 (1/6) True)
+bridge1B (Options frame _ depth _ _ _ _ s kick) =
+    genSection (Options frame 5427 depth 0.5 0.0007 0.0002 0.002 (1/7) kick)
 
 bridge1C :: Options -> IO Options
-bridge1C (Options frame _ depth zoom _ _ _ s _) =
-    genSection (Options frame 5856 depth 0.5 0.001 0.00025 0.0025 (2/6) True)
+bridge1C (Options frame _ depth _ _ _ _ s kick) =
+    genSection (Options frame 5856 depth 0.5 0.001 0.00025 0.0025 (2/7) kick)
+
+chorus1 :: Options -> IO Options
+chorus1 (Options frame _ depth zoom zoomStep cXstep cYstep s kick) =
+    genSection (Options frame 7421 depth zoom zoomStep cxStep cYstep s kick)
+
+chorusend :: Options -> IO Options
+chorusend (Options frame _ depth zoom zoomStep cXstep cYstep s kick) =
+    genSection (Options frame 7643 depth zoom 0.0001 cxStep cYstep s False)
+
+bridge2 :: Options -> IO Options
+bridge2 (Options frame _ depth zoom zoomStep cXstep cYstep s kick) =
+    genSection (Options frame 8086 depth zoom 0.001 cxStep cYstep s True)
+
+verse2a :: Options -> IO Options
+chorusend (Options frame _ depth zoom zoomStep cXstep cYstep s kick) =
+    genSection (Options frame 8972 depth 0.5 0.0012 0.0003 0.003 (3/7) kick)
+
+verse2b :: Options -> IO Options
+chorusend (Options frame _ depth zoom zoomStep cXstep cYstep s kick) =
+    genSection (Options frame 9858 depth 0.5 0.0015 0.00035 0.0035 (4/7) kick)
+
+verse2c :: Options -> IO Options
+chorusend (Options frame _ depth zoom zoomStep cXstep cYstep s kick) =
+    genSection (Options frame 10744 depth 0.5 0.0017 0.0004 0.004 (5/7) kick)
+
+prechorus :: Options -> IO Options
+chorusend (Options frame _ depth zoom zoomStep cXstep cYstep s kick) =
+    genSection (Options frame 11187 depth 0.5 0.0017 0.0004 0.004 (6/7) kick)
+
+chorus2 :: Options -> IO Options
+chorusend (Options frame _ depth zoom zoomStep cXstep cYstep s kick) =
+    genSection (Options frame 13402 depth 0.06 0.004 0.0008 0.008 (7/7) kick)
+
+outro :: Options -> IO Options
+outro (Options frame _ depth zoom zoomStep cXstep cYstep s kick) =
+    genSection (Options frame 14122 depth zoom -0.0005 0 0 0 False)
