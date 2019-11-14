@@ -4,3 +4,6 @@ out/
 *.asd
 dist-newstyle/
 .DS_Store
+.hi
+.o
+fractalvisions
