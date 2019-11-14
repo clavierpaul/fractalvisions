@@ -1,3 +1,9 @@
+{-# LANGUAGE CPP                 #-}
+{-# LANGUAGE FlexibleContexts    #-}
+{-# LANGUAGE RankNTypes          #-}
+{-# LANGUAGE RecordWildCards     #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Processing where
 
 import Codec.Picture
@@ -5,6 +11,9 @@ import Data.Colour.RGBSpace.HSV
 import Data.Colour.RGBSpace
 import GHC.Word
 import Data.List
+
+import Control.Monad.ST
+import qualified Codec.Picture.Types as M
 
 hsvToRGB :: Int -> Double -> Double -> PixelRGB8
 hsvToRGB h s v = PixelRGB8 r g b
@@ -51,17 +60,6 @@ saturation s (PixelRGB8 r g b) = hsvToRGB (if h < 0 then h + 360 else h) s v
 -- Portability :  portable
 --
 -- Utilities for image transformation with JuicyPixels.
-
-{-# LANGUAGE CPP                 #-}
-{-# LANGUAGE FlexibleContexts    #-}
-{-# LANGUAGE RankNTypes          #-}
-{-# LANGUAGE RecordWildCards     #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-
-import Codec.Picture
-import Control.Monad.ST
-import Data.List (foldl1')
-import qualified Codec.Picture.Types as M
 
 -- | Scale an image using bi-linear interpolation.
 

@@ -35,7 +35,7 @@ genFrame :: Julia -> Int -> Double -> IO ()
 genFrame f frame sat = do
     -- write frame to file
     writePng (printf "out/frame%04d.png" frame) frameF
-    if frame `mod` 2000 == 0 
+    if frame `mod` 10 == 0 
         then putStrLn $ printf "Rendering frame %d" (frame + 1) 
         else return()
     where
