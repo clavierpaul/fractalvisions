@@ -103,7 +103,7 @@ introA = genSection (Options 0 115 10 0.3 0.0001 0 0 0 False)
 
 introB :: Options -> IO Options
 introB (Options frame _ depth zoom zoomStep _ _ s _) =
-    genSection (Options frame 554 depth zoom zoomStep 0.0001 0.001 1 False)
+    genSection (Options frame 554 depth zoom zoomStep 0.0001 0.001 0 False)
 
 verse1 :: Options -> IO Options
 verse1 (Options frame _ depth zoom zoomStep cXstep cYstep s _) =
