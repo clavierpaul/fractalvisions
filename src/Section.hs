@@ -28,7 +28,8 @@ data Options = Options {
     kick       :: Bool
 } deriving (Show, Eq)
 
-quarterNotes = map (\x -> 569 + round (x * (3600.0/130.0))) [0..20000]
+quarterNotesA = map (\x -> 554 + round (x * (3600.0/130.0))) [0..7421]
+quarterNotesB = map (\x -> 7643 + round (x * (3600.0/130.0))) [0..10000]
 
 genFrame :: Julia -> Int -> Double -> IO ()
 genFrame f frame sat = do
@@ -70,9 +71,16 @@ genSection (Options frame out depth zoom zoomStep cXstep cYstep sat kick) = do
 
         newcX  = sin $ nFrame * cXstep
         newcY  = sin $ nFrame * cYstep
-
+        
+        -- set up kick events before and after first chorus
         -- disable kick events if no kick
-        kickFrames = if kick then quarterNotes else [-1]
+        kickFrames 
+            | not kick = [-1]
+            | otherwise = 
+                if frame < 7422 then
+                    quarterNotesA
+                else
+                    quarterNotesB
 
         -- increase depth and zoom if kick
         newDepth = if frame `elem` kickFrames then depth + 1 else depth
@@ -81,16 +89,24 @@ genSection (Options frame out depth zoom zoomStep cXstep cYstep sat kick) = do
             | otherwise = if frame `elem` kickFrames then zoom + (zoomStep * 10) else zoom + zoomStep
 
 introA :: IO Options
-introA = genSection (Options 0 126 10 0.3 0.0001 0 0 0 False)
+introA = genSection (Options 0 115 10 0.3 0.0001 0 0 0 False)
 
 introB :: Options -> IO Options
 introB (Options frame _ depth zoom zoomStep _ _ s _) =
-    genSection (Options frame 569 depth zoom zoomStep 0.0001 0.001 s False)
+    genSection (Options frame 554 depth zoom zoomStep 0.0001 0.001 s False)
 
 verse1 :: Options -> IO Options
 verse1 (Options frame _ depth zoom zoomStep cXstep cYstep s _) =
-    genSection (Options frame 4114 depth zoom zoomStep cXstep cYstep s True)
+    genSection (Options frame 4098 depth zoom zoomStep cXstep cYstep s True)
 
 bridge1A :: Options -> IO Options
 bridge1A (Options frame _ depth zoom _ _ _ s _) =
-    genSection (Options frame 4557 depth zoom 0.0005 0.00015 0.0015 s True)
+    genSection (Options frame 4541 depth zoom 0.0005 0.00015 0.0015 s True)
+
+bridge1B :: Options -> IO Options
+bridge1B (Options frame _ depth zoom _ _ _ s _) =
+    genSection (Options frame 5427 depth 0.5 0.0007 0.0002 0.002 (1/6) True)
+
+bridge1C :: Options -> IO Options
+bridge1C (Options frame _ depth zoom _ _ _ s _) =
+    genSection (Options frame 5856 depth 0.5 0.001 0.00025 0.0025 (2/6) True)

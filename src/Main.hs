@@ -8,5 +8,6 @@ main :: IO ()
 main = do
   iA <- introA 
   iB <- introB iA
-  verseA iB
+  v1 <- verse1 iB
+  b1a <- bridge1A v1
   return ()
