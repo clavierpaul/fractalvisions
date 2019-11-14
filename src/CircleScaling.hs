@@ -10,6 +10,6 @@ module CircleScaling where
     case imageLoad of
       Left error -> putStrLn error
       Right (ImageRGBA8 image) -> do
-        writePng "src/circle2.png" (scaleBilinear 100 100 image)
+        writePng "src/circle2.png" (scaleBilinear 1000 1000 image)
 
       
