@@ -95,7 +95,7 @@ genSection (Options frame out depth zoom zoomStep cXstep cYstep sat kick) = do
         -- increase depth and zoom if kick
         newDepth = if frame `elem` kickFrames then depth + 1 else depth
         newZoom 
-            | zoom > 3 = 0.5
+            | zoom > 2 = 0
             | otherwise = if frame `elem` kickFrames then zoom + (zoomStep * 10) else zoom + zoomStep
 
 introA :: IO Options
