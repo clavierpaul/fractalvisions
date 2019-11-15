@@ -23,6 +23,7 @@ import Text.Printf
 import System.Random
 import Data.Array
 import Control.Parallel.Strategies
+import DrawBitmap
 
 import Fractal
 import qualified Processing
@@ -42,45 +43,40 @@ data Options = Options {
 quarterNotesA = map (\x -> 554 + round (x * (3600.0/130.0))) [0..7421]
 quarterNotesB = map (\x -> 7643 + round (x * (3600.0/130.0))) [0..10000]
 
+-- write frame to file
 genFrame :: Julia -> Int -> IO ()
-genFrame f frame = do
-    -- write frame to file
-    writePng (printf "out/frame%04d.png" frame) frameF
-    if frame `mod` 2000 == 0 
-        then putStrLn $ printf "Rendering frame %d" (frame + 1) 
-        else return()
+genFrame f frame = writePng (printf "out/frame%05d.png" frame) frameF
     where
         h = height f
         w = width f
         bounds     = ((0, 0), (w-1,h-1))
         pixels     = parMap rseq (uncurry (genFractal f)) (range bounds)
-        pixelArray = listArray bounds pixels
+        radius     = round((fromIntegral w) * (fromIntegral frame) / 12.0)
+        circle     = genCirclePoints w h radius 10
+        overlay    = zipWith (\(PixelRGB8 r g b) c -> if c then PixelRGB8 (255-r) (255-g) (255-b) else PixelRGB8 r g b) pixels circle
+        pixelArray = listArray bounds overlay
         f'         = curry (pixelArray !)
         frameF     = generateImage f' w h
 
-        -- bounds = ((0, 0), (width-1,height-1))
-        -- pixels = [0,1,1...]
-        -- pixelArray = listArray bounds pixels
+
 genSection :: Options -> IO Options
 genSection (Options frame out depth zoom zoomStep cXstep cYstep sat kick) = do
         -- define fractal
-        let f = Julia 200 200 zoom newcX newcY depth frame sat
+        let f = Julia 360 480 zoom newcX newcY depth frame sat
         
         -- render fractal
         genFrame f frame
 
         -- re-run with new params if frames left to render
         if (frame + 1) == out
-        then 
-            return $ Options frame out depth zoom zoomStep cXstep cYstep sat kick
-        else 
-            genSection $ Options (frame + 1) out newDepth newZoom zoomStep cXstep cYstep sat kick
+            then return $ Options frame out depth zoom zoomStep cXstep cYstep sat kick
+            else genSection $ Options (frame + 1) out newDepth newZoom zoomStep cXstep cYstep sat kick
     where
         nFrame = fromIntegral frame
         nDepth = fromIntegral depth
 
-        newcX  = sin $ negate (nFrame) * cXstep
-        newcY  = sin $ negate (nFrame) * cYstep
+        newcX  = sin $ negate nFrame * cXstep
+        newcY  = sin $ negate nFrame * cYstep
         
         -- set up kick events before and after first chorus
         -- disable kick events if no kick
@@ -99,7 +95,7 @@ genSection (Options frame out depth zoom zoomStep cXstep cYstep sat kick) = do
             | otherwise = if frame `elem` kickFrames then zoom + (zoomStep * 10) else zoom + zoomStep
 
 introA :: IO Options
-introA = genSection (Options 0 115 10 0.3 0.0001 0 0 0 False)
+introA = genSection (Options 0 20 10 0.3 0.0001 0 0 0 False)
 
 introB :: Options -> IO Options
 introB (Options frame _ depth zoom zoomStep _ _ s _) =

@@ -10,8 +10,7 @@ import Data.Array
 
 -- legacy code by Filip
 drawCircle :: Int -> Int -> Int -> IO()
-drawCircle frameSize radius thickness = do    
-  writePng "../test/TEST.png" $ generateImage pixelRenderer frameSize frameSize
+drawCircle frameSize radius thickness = writePng "../test/TEST.png" $ generateImage pixelRenderer frameSize frameSize
   where
     centre = (frameSize `div` 2,frameSize `div` 2)
     circlePoints = concatMap (generateCirclePoints centre) [(radius-(thickness `div` 2))..(radius + (thickness `div` 2))]
@@ -31,5 +30,5 @@ genCirclePoints w h radius thickness = pixels
     circlePoints = concatMap (generateCirclePoints centre) [(radius-(thickness `div` 2))..(radius + (thickness `div` 2))]
     centre = (w `div` 2,h `div` 2)
     bounds = ((0,0),(w-1,h-1))
-    pixels = map (\coordinate -> coordinate `elem` circlePoints) (range bounds)
+    pixels = map (`elem` circlePoints) (range bounds)
     
