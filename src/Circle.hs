@@ -1,3 +1,6 @@
+-- Taken from Phil Schumann's GitHub repository rosetta-haskell-dump
+-- https://github.com/metaleap/rosetta-haskell-dump/blob/master/bitmap-midpoint-circle-algorithm-1.hs
+
 module Circle where
  
 import Data.List
