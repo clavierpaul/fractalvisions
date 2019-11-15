@@ -1,6 +1,5 @@
 .stack-work/
 out/
-*.mp4
 *.asd
 dist-newstyle/
 .DS_Store
