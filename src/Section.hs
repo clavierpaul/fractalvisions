@@ -41,7 +41,7 @@ genFrame f frame cFrame doCircle = do
         w = width f
         bounds     = ((0, 0), (w-1,h-1))
         pixels     = parMap rseq (uncurry (genFractal f)) (range bounds)
-        radius     = round ((fromIntegral w) * (fromIntegral cFrame) / 24.0) + 1
+        radius     = round ((fromIntegral w) * (fromIntegral cFrame) / 12.0) + 1
         circle     = genCirclePoints w h radius (w `div` 12)
         overlay    = zipWith (\(PixelRGB8 r g b) c -> if c then PixelRGB8 (255-r) (255-g) (255-b) else PixelRGB8 r g b) pixels circle
         pixelArray = listArray bounds $ if doCircle then overlay else pixels
@@ -52,7 +52,7 @@ genFrame f frame cFrame doCircle = do
 genSection :: Options -> IO Options
 genSection (Options frame out depth zoom zoomStep cXstep cYstep sat kick circles cFrames) = do
         -- define fractal
-        let f = Julia 200 200 zoom newcX newcY depth frame sat
+        let f = Julia 720 1280 zoom newcX newcY depth frame sat
         
         -- render fractal
         genFrame f frame (18 - cFrames) doCircle
