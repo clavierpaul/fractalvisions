@@ -52,7 +52,7 @@ genFrame f frame cFrame doCircle = do
 genSection :: Options -> IO Options
 genSection (Options frame out depth zoom zoomStep cXstep cYstep sat kick circles cFrames) = do
         -- define fractal
-        let f = Julia 200 200 zoom newcX newcY depth frame sat
+        let f = Julia 720 1280 zoom newcX newcY depth frame sat
         
         -- render fractal
         genFrame f frame (18 - cFrames) doCircle
