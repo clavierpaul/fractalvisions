@@ -51,7 +51,8 @@ genFrame f frame = writePng (printf "out/frame%05d.png" frame) frameF
         w = width f
         bounds     = ((0, 0), (w-1,h-1))
         pixels     = parMap rseq (uncurry (genFractal f)) (range bounds)
-        circle     = genCirclePoints w h (w * round (fromIntegral frame / 12.0)) 100
+        radius     = round((fromIntegral w) * (fromIntegral frame) / 12.0)
+        circle     = genCirclePoints w h radius 10
         overlay    = zipWith (\(PixelRGB8 r g b) c -> if c then PixelRGB8 (255-r) (255-g) (255-b) else PixelRGB8 r g b) pixels circle
         pixelArray = listArray bounds overlay
         f'         = curry (pixelArray !)
@@ -68,10 +69,8 @@ genSection (Options frame out depth zoom zoomStep cXstep cYstep sat kick) = do
 
         -- re-run with new params if frames left to render
         if (frame + 1) == out
-        then 
-            return $ Options frame out depth zoom zoomStep cXstep cYstep sat kick
-        else 
-            genSection $ Options (frame + 1) out newDepth newZoom zoomStep cXstep cYstep sat kick
+            then return $ Options frame out depth zoom zoomStep cXstep cYstep sat kick
+            else genSection $ Options (frame + 1) out newDepth newZoom zoomStep cXstep cYstep sat kick
     where
         nFrame = fromIntegral frame
         nDepth = fromIntegral depth
