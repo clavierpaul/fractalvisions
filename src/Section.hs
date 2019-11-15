@@ -46,7 +46,7 @@ genFrame :: Julia -> Int -> IO ()
 genFrame f frame = do
     -- write frame to file
     writePng (printf "out/frame%04d.png" frame) frameF
-    if frame `mod` 10 == 0 
+    if frame `mod` 2000 == 0 
         then putStrLn $ printf "Rendering frame %d" (frame + 1) 
         else return()
     where
@@ -79,8 +79,8 @@ genSection (Options frame out depth zoom zoomStep cXstep cYstep sat kick) = do
         nFrame = fromIntegral frame
         nDepth = fromIntegral depth
 
-        newcX  = sin $ nFrame * cXstep
-        newcY  = sin $ nFrame * cYstep
+        newcX  = sin $ negate (nFrame) * cXstep
+        newcY  = sin $ negate (nFrame) * cYstep
         
         -- set up kick events before and after first chorus
         -- disable kick events if no kick
@@ -103,7 +103,7 @@ introA = genSection (Options 0 115 10 0.3 0.0001 0 0 0 False)
 
 introB :: Options -> IO Options
 introB (Options frame _ depth zoom zoomStep _ _ s _) =
-    genSection (Options frame 554 depth zoom zoomStep 0.0001 0.001 1 False)
+    genSection (Options frame 554 depth zoom zoomStep 0.0001 0.001 s False)
 
 verse1 :: Options -> IO Options
 verse1 (Options frame _ depth zoom zoomStep cXstep cYstep s _) =
