@@ -50,8 +50,5 @@ genFractal fract x y = pixel
 
     i = fractalLoop zx zy cx cy $ maxIter fract
     v = abs $ sin i
+    
     pixel = hsvToRGB (fromIntegral $ f `mod` 360) s v
-    -- r = round $ (sin((0.3147 * i) + 4) * 230) + 25
-    -- g = round $ (sin((0.3145 * i) + 4) * 230) + 25
-    -- b = round $ (sin((0.3146 * i) + 4) * 230) + 25
-    -- l = fromIntegral $ 255 - round (r * 0.399 + g * 0.487 + b * 0.114)
