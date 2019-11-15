@@ -7,10 +7,11 @@ import Section
 main :: IO ()
 main = do
   iA <- introA 
-  -- iB <- introB iA
-  -- v1 <- verse1 iB
-  -- b1a <- bridge1A v1
-  -- b1b <- bridge1B b1a
+  iB <- introB iA
+  v1 <- verse1 iB
+  b1a <- bridge1A v1
+  cb1b <- cBridge1B b1a
+  b1b <- bridge1B cb1b
   -- b1c <- bridge1C b1b
   -- c1 <- chorus1 b1c
   -- ce <- chorusend c1
