@@ -35,3 +35,8 @@ brew install ffmpeg
 Using Haskell, we generate a fractal on every frame and write the fractal as a png file into `out/`. The parameters of the fractal (coefficients, zoom, depth, color saturation, etc.) are controlled by the section of the song and the kick drum. FFmpeg is then used to combine the frames into a video and add the song audio.
 
 The hardest part of the video was likely the circle which appears on vocal chops. Though this was expected to be easy, we ran into several issues in the implementation. We finally got a result we were happy with, though it took several days. Otherwise, scaffolding the project in general and dealing with Haskell's ~~oddities~~ innovative approach to program state was a fun challenge.
+
+## Credits
+### Circle-generating algorithm
+Source: [Phil Schumann's GitHub repository](https://github.com/metaleap/rosetta-haskell-dump/blob/master/bitmap-midpoint-circle-algorithm-1.hs)
+
