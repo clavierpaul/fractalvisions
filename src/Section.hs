@@ -115,13 +115,9 @@ bridge1A :: Options -> IO Options
 bridge1A (Options frame _ depth zoom zoomStep cXstep cYstep s kick c cf) =
     genSection (Options frame 4541 depth zoom 0.0005 0.00015 0.0015 s kick c cf)
 
-cBridge1B :: Options -> IO Options
-cBridge1B (Options frame _ depth zoom zoomStep cXstep cYstep s kick c cf) =
-    genSection (Options frame 4541 depth 0.5 0.0007 0.0002 0.002 (1/7) kick 8 24)
-
 bridge1B :: Options -> IO Options
 bridge1B (Options frame _ depth zoom zoomStep cXstep cYstep s kick c cf) =
-    genSection (Options frame 5427 depth zoom zoomStep cXstep cYstep s kick 0 0)
+    genSection (Options frame 5427 depth 0.5 0.0007 0.0002 0.002 (1/7) kick 8 24)
 
 bridge1C :: Options -> IO Options
 bridge1C (Options frame _ depth zoom zoomStep cXstep cYstep s kick c cf) =
