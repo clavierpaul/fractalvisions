@@ -1,5 +1,7 @@
 # FRACTAL/VISIONS
 
+Watch here: https://www.youtube.com/watch?v=4iUKiCezmRM
+
 A fractal based music video for the song Science/Visions by CHVRCHES, written in Haskell.
 
 ## Dependencies
