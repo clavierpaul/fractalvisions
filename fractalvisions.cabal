@@ -28,6 +28,4 @@ executable fractalvisions
                      , random
                      , array
                      , parallel
-                     , colour
-                     , ghc
 
