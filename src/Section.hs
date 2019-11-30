@@ -74,12 +74,9 @@ genSection (Options frame out depth zoom zoomStep cXstep cYstep sat kick circles
         -- disable kick events if no kick
         kickFrames 
             | not kick = [-1]
-            | otherwise = 
-                if frame < 7422 then
-                    quarterNotesA
-                else
-                    quarterNotesB
-        
+            | frame < 7422 = quarterNotesA
+            | otherwise = quarterNotesB 
+                
         chopFrames
             | frame < 7422 = chopNotesA
             | otherwise    = chopNotesB
