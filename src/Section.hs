@@ -87,16 +87,21 @@ genSection (Options frame out depth zoom zoomStep cXstep cYstep sat kick circles
             | cFrames == 0                            = 0
             | otherwise                               = cFrames - 1
         
-        nCircles = if nCFrames == 18 then circles - 1 else circles
+        nCircles
+            | nCFrames == 18 = circles - 1 
+            | otherwise = circles
         
         doCircle = cFrames /= 0
 
         -- increase depth and zoom if kick
-        newDepth = if frame `elem` kickFrames then depth + 1 else depth
+        newDepth
+            | frame `elem` kickFrames = depth + 1 
+            | otherwise = depth
         newZoom 
             | zoom > 2 = 0
-            | zoom <= 2 && frame `elem` kickFrames = zoom + (zoomStep * 10) 
+            | frame `elem` kickFrames = zoom + (zoomStep * 10) 
             | otherwise = zoom + zoomStep
+
 introA :: IO Options
 introA = genSection (Options 0 111 10 0.3 0.0001 0 0 0 False 0 0)
 
